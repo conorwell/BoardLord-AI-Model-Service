@@ -1,0 +1,49 @@
+# Cloud Build config — triggered on push to build, push, and deploy to Cloud Run.
+# Required substitution variables (set in Cloud Build trigger or defaults below):
+#   _SERVICE_NAME   — Cloud Run service name (default: board-lord-model-service)
+#   _REGION         — GCP region (default: us-central1)
+#   _GCS_BUCKET     — GCS bucket holding best_model.pt
+#   _IMAGE          — Artifact Registry image path
+
+substitutions:
+  _SERVICE_NAME: board-lord-model-service
+  _REGION: us-central1
+  _IMAGE: us-central1-docker.pkg.dev/${PROJECT_ID}/board-lord/model-service
+
+steps:
+  # 1. Build Docker image
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - -t
+      - ${_IMAGE}:${SHORT_SHA}
+      - -t
+      - ${_IMAGE}:latest
+      - .
+
+  # 2. Push image to Artifact Registry
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - --all-tags
+      - ${_IMAGE}
+
+  # 3. Deploy to Cloud Run
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - ${_SERVICE_NAME}
+      - --image=${_IMAGE}:${SHORT_SHA}
+      - --region=${_REGION}
+      - --platform=managed
+      - --allow-unauthenticated
+      - --memory=1Gi
+      - --cpu=1
+      - --timeout=60
+      - --set-env-vars=GCS_BUCKET=${_GCS_BUCKET}
+
+images:
+  - ${_IMAGE}:${SHORT_SHA}
+  - ${_IMAGE}:latest
