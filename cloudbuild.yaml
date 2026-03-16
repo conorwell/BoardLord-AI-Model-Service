@@ -44,6 +44,9 @@ steps:
       - --timeout=60
       - --set-env-vars=GCS_BUCKET=${_GCS_BUCKET}
 
+options:
+  logging: CLOUD_LOGGING_ONLY
+
 images:
   - ${_IMAGE}:${SHORT_SHA}
   - ${_IMAGE}:latest
