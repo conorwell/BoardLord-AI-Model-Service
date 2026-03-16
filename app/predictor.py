@@ -20,12 +20,9 @@ def load():
     client = storage.Client()
     bucket = client.bucket(bucket_name)
 
-    model_blob = bucket.blob("models/latest.txt").download_as_text().strip()
-    print(f"Latest model: {model_blob}")
-
     model_path = "/tmp/model.pt"
-    print(f"Downloading gs://{bucket_name}/models/{model_blob} -> {model_path}")
-    bucket.blob(f"models/{model_blob}").download_to_filename(model_path)
+    print(f"Downloading gs://{bucket_name}/board_cnn_latest.pt -> {model_path}")
+    bucket.blob("board_cnn_latest.pt").download_to_filename(model_path)
 
     m = BoardCNN(dropout=0.0)
     m.load_state_dict(torch.load(model_path, map_location=DEVICE))
