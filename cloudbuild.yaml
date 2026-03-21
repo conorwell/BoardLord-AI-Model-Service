@@ -41,7 +41,7 @@ steps:
       - --allow-unauthenticated
       - --memory=1Gi
       - --cpu=1
-      - --timeout=300
+      - --timeout=60
       - --cpu-boost
       - --set-env-vars=GCS_BUCKET=${_GCS_BUCKET}
 

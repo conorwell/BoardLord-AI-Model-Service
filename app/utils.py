@@ -17,9 +17,9 @@ NUM_CHANNELS = 5
 
 PLASTIC_SET_ID = 13  # set_id=12 is wood, set_id=13 is plastic
 
-MAX_VGRADE = 11   # V11+ is a single class
+MAX_VGRADE = 12   # V12+ is a single class
 LOW_COLLAPSE = 2  # V0, V1, V2 collapsed into ≤V2
-NUM_CLASSES = MAX_VGRADE - LOW_COLLAPSE + 1  # 10 classes: ≤V2, V3–V10, V11+
+NUM_CLASSES = MAX_VGRADE - LOW_COLLAPSE + 1  # 11 classes: ≤V2, V3–V11, V12+
 
 
 def load_position_map() -> dict:
@@ -62,4 +62,4 @@ def vgrade_to_label(cls: int) -> str:
     if cls == 0:
         return f'≤V{LOW_COLLAPSE}'
     v = cls + LOW_COLLAPSE
-    return 'V11+' if v >= MAX_VGRADE else f'V{v}'
+    return 'V12+' if v >= MAX_VGRADE else f'V{v}'

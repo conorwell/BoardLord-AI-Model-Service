@@ -17,7 +17,7 @@ class BoardCNN(nn.Module):
         nomatch   — (batch,) float, 1.0 if the problem has a matchable hold, 0.0 if not
 
     Output:
-        (batch, 11) logits — one per V-grade class (≤V2, V3–V10, V11+)
+        (batch, 11) logits — one per V-grade class (≤V2, V3–V11, V12+)
     """
 
     NUM_ANGLES = 14
